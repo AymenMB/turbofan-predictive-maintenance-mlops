@@ -1,0 +1,14 @@
+# Python cache
+__pycache__/
+
+# Virtual environments
+.venv/
+
+# macOS metadata
+.DS_Store
+
+# Data directory will be tracked via DVC later
+/data/
+
+# Optional: Jupyter checkpoints
+.ipynb_checkpoints/

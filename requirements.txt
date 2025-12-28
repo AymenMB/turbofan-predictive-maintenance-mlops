@@ -1,0 +1,10 @@
+pandas
+numpy
+scikit-learn
+xgboost
+mlflow
+zenml
+dvc
+fastapi
+uvicorn
+matplotlib

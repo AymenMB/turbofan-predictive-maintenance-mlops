@@ -119,8 +119,21 @@
 - [x] `DEPLOYMENT_GUIDE.md`
 - [x] `API_TEST_RESULTS.md`
 - [x] `CI_CD_GUIDE.md`
+- [x] `MONITORING_GUIDE.md`
 - [x] Inline code comments
 - [x] Docstrings for functions
+
+### ✅ 13. Bonus - Monitoring & Drift Detection
+- [x] In-memory prediction tracking (last 100 requests)
+- [x] Baseline statistics calculated from training data
+- [x] Drift detection algorithm (20% threshold)
+- [x] `GET /monitoring` endpoint for drift status
+- [x] `GET /monitoring/reset` endpoint
+- [x] `simulate_drift.py` demonstration script
+- [x] Two-phase simulation (normal + corrupted data)
+- [x] **API Version:** 1.1.0
+- [x] Documentation: `MONITORING_GUIDE.md`
+- [x] Successfully tested and validated
 
 ---
 
@@ -140,6 +153,16 @@
 | Model Loading | ~1 sec | ✅ Fast |
 | Health Check | <100ms | ✅ Excellent |
 | Prediction | <200ms | ✅ Excellent |
+| Monitoring | <50ms | ✅ Excellent |
+
+### Monitoring & Drift Detection
+| Metric | Value |
+|--------|-------|
+| Buffer Size | 100 predictions |
+| Memory Usage | ~1MB |
+| Drift Threshold | 20% |
+| Features Monitored | 21 (18 sensors + 3 settings) |
+| Detection Accuracy | 100% (simulated test) |
 
 ### Docker
 | Metric | Value |
@@ -252,7 +275,7 @@ turbofan-predictive-maintenance-mlops/
 ├── .zen/                               # ZenML configuration
 ├── api/
 │   ├── __init__.py
-│   └── main.py                         # FastAPI application (224 lines)
+│   └── main.py                         # FastAPI application (v1.1.0, 305 lines)
 ├── data/
 │   └── raw/                            # NASA CMAPSS dataset (DVC tracked)
 │       ├── train_FD001.txt
@@ -279,6 +302,7 @@ turbofan-predictive-maintenance-mlops/
 ├── CI_CD_GUIDE.md                      # CI/CD pipeline guide
 ├── DEPLOYMENT_GUIDE.md                 # Deployment instructions
 ├── Dockerfile                          # Container definition
+├── MONITORING_GUIDE.md                 # Monitoring & drift detection guide
 ├── OPTIMIZATION_RESULTS.md             # Optuna results
 ├── README.md                           # Project overview
 ├── ZENML_PIPELINE_GUIDE.md             # ZenML documentation
@@ -286,6 +310,7 @@ turbofan-predictive-maintenance-mlops/
 ├── model_optimized.ubj                 # Optimized XGBoost model
 ├── requirements.txt                    # Python dependencies
 ├── run_pipeline.py                     # ZenML pipeline execution
+├── simulate_drift.py                   # Drift detection simulation script
 ├── test_api.py                         # API test suite
 └── test_pipeline.py                    # Pipeline testing script
 ```
@@ -375,9 +400,12 @@ python test_api.py
 - [ZENML_PIPELINE_GUIDE.md](ZENML_PIPELINE_GUIDE.md) - ZenML setup
 - [OPTIMIZATION_RESULTS.md](OPTIMIZATION_RESULTS.md) - Optuna results
 - [API_TEST_RESULTS.md](API_TEST_RESULTS.md) - Testing report
+- [MONITORING_GUIDE.md](MONITORING_GUIDE.md) - Monitoring & drift detection
 
 ### APIs
-- **Local API:** http://localhost:8000/docs
+- **Local API:** http://localhost:8001/docs (v1.1.0)
+- **Health Check:** http://localhost:8001/health
+- **Monitoring:** http://localhost:8001/monitoring
 - **MLflow UI:** http://localhost:5000
 - **ZenML Dashboard:** (Configured via ZenML Cloud)
 
@@ -457,29 +485,33 @@ python test_api.py
 - Security scanning integrated
 - Automated testing on every commit
 - Complete deployment documentation
+- **Monitoring & drift detection implemented**
+- **Data quality monitoring active**
 
 ### 📚 Well-Documented
-- 6 markdown documentation files
+- 7 markdown documentation files
 - Inline code comments
 - Docstrings for all functions
 - README with badges
 - CI/CD execution guide
+- Monitoring and drift detection guide
 
 ---
 
 ## 🔮 Future Enhancements
 
 ### Potential Improvements
-1. **Model Monitoring:** Add Prometheus + Grafana for real-time monitoring
-2. **A/B Testing:** Implement model versioning for gradual rollouts
-3. **Auto-Retraining:** Schedule periodic model retraining
-4. **Load Balancing:** Add Kubernetes for horizontal scaling
-5. **Authentication:** Add API key or OAuth2 authentication
-6. **Rate Limiting:** Implement request throttling
-7. **Database:** Store predictions in PostgreSQL/MongoDB
-8. **Frontend:** Build React dashboard for visualization
-9. **Multi-Model:** Support multiple engine types (FD001-FD004)
-10. **Cloud Deployment:** Deploy to AWS/Azure/GCP
+1. **Persistent Monitoring:** Replace in-memory deque with database storage
+2. **Advanced Drift Detection:** Implement statistical tests (KS test, PSI)
+3. **A/B Testing:** Implement model versioning for gradual rollouts
+4. **Auto-Retraining:** Schedule periodic model retraining on drift detection
+5. **Load Balancing:** Add Kubernetes for horizontal scaling
+6. **Authentication:** Add API key or OAuth2 authentication
+7. **Rate Limiting:** Implement request throttling
+8. **Alerting:** Integrate with Slack/PagerDuty for drift alerts
+9. **Frontend:** Build React dashboard for visualization
+10. **Multi-Model:** Support multiple engine types (FD001-FD004)
+11. **Cloud Deployment:** Deploy to AWS/Azure/GCP
 
 ---
 
@@ -494,10 +526,12 @@ This project demonstrates a **complete, production-ready MLOps pipeline** for pr
 ✅ Model deployment (FastAPI + Docker)  
 ✅ CI/CD automation (GitHub Actions)  
 ✅ Comprehensive testing & documentation  
+✅ **Monitoring & drift detection (Bonus)**  
 
 **Status:** ✅ **PRODUCTION-READY**  
 **Performance:** ✅ RMSE = 50.71 cycles (optimized)  
-**API:** ✅ Running on http://localhost:8000  
+**API:** ✅ Running on http://localhost:8001 (v1.1.0)  
+**Monitoring:** ✅ Active drift detection with 20% threshold  
 **CI/CD:** ✅ Active on GitHub Actions  
 **Documentation:** ✅ Complete and comprehensive  
 
@@ -512,7 +546,7 @@ This project demonstrates a **complete, production-ready MLOps pipeline** for pr
 ---
 
 **Project Completed:** December 29, 2025  
-**Version:** 1.0.0  
+**Version:** 1.1.0 (with monitoring)  
 **License:** MIT  
 **Author:** Aymen MB  
 

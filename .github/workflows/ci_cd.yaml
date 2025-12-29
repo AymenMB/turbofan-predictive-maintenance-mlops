@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  PYTHON_VERSION: "3.9"
+  PYTHON_VERSION: '3.9'
   DOCKER_IMAGE_NAME: turbofan-rul-api
 
 jobs:
@@ -19,12 +19,12 @@ jobs:
   test-and-lint:
     name: Test & Lint
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch all history for DVC
+          fetch-depth: 0 # Fetch all history for DVC
 
       - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@v5
@@ -81,7 +81,7 @@ jobs:
     name: Build Docker Image
     runs-on: ubuntu-latest
     needs: test-and-lint
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -106,21 +106,21 @@ jobs:
         run: |
           # Start container in detached mode
           docker run -d --name test-api -p 8000:8000 ${{ env.DOCKER_IMAGE_NAME }}:latest
-          
+
           # Wait for container to be ready
           echo "Waiting for API to start..."
           sleep 10
-          
+
           # Check if container is running
           docker ps | grep test-api || (docker logs test-api && exit 1)
-          
+
           # Test health endpoint
           curl -f http://localhost:8000/health || (docker logs test-api && exit 1)
-          
+
           # Cleanup
           docker stop test-api
           docker rm test-api
-          
+
           echo "✅ Docker image built and tested successfully!"
 
       - name: Save Docker image as artifact (optional)
@@ -160,7 +160,7 @@ jobs:
     name: ML Pipeline Continuous Testing
     runs-on: ubuntu-latest
     needs: test-and-lint
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -189,7 +189,7 @@ jobs:
         run: |
           # Option 1: Use DVC to pull data (if remote configured)
           # dvc pull
-          
+
           # Option 2: Use cached data or small subset for CI
           if [ -f "data/raw/train_FD001.txt" ]; then
             echo "Data files found, using existing data"
@@ -222,7 +222,7 @@ jobs:
             echo "⚠️  ZenML pipeline execution skipped in CI (requires ZenML server setup)"
             echo "In production, you would configure ZenML Cloud or local server"
           fi
-          
+
           # Option 2: Run basic training test
           python -c "
           import sys
@@ -285,7 +285,7 @@ jobs:
     name: Security Scan
     runs-on: ubuntu-latest
     needs: test-and-lint
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -319,7 +319,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test-and-lint, build-container, ml-pipeline-simulation]
     if: always()
-    
+
     steps:
       - name: Generate deployment report
         run: |

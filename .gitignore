@@ -8,7 +8,10 @@ __pycache__/
 .DS_Store
 
 # Data directory will be tracked via DVC later
-/data/
+# Keep .dvc files tracked, but ignore the actual data
+/data/raw/*
+/data/processed/*
+!*.dvc
 
 # Optional: Jupyter checkpoints
 .ipynb_checkpoints/

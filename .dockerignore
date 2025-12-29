@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data files (large datasets not needed in container)
+data/raw/*.txt
+data/processed/
+
+# DVC
+.dvc/
+*.dvc
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# MLflow
+mlruns/
+mlflow.db
+
+# ZenML
+.zen/
+
+# Documentation
+*.md
+!README.md
+
+# Tests
+tests/
+test_*.py
+*_test.py
+
+# Notebooks
+notebooks/
+*.ipynb
+
+# Other
+.DS_Store
+*.log
+screenshots/
+*.png
+!api/
+
+# Keep only essential files
+!requirements.txt
+!model_optimized.ubj
+!api/
+!src/
+!Dockerfile
+!docker-compose.yml

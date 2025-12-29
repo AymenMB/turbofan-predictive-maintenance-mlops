@@ -21,7 +21,49 @@ Production-grade MLOps project using NASA CMAPSS turbofan engine data for Remain
 
 ## Data
 - The dataset files provided in this repository were moved to `data/raw/`.
-- The `data/` directory is ignored by Git; plan to track datasets with DVC in a next step.
+- The `data/` directory is ignored by Git and managed by DVC.
+
+## Data Versioning (DVC)
+
+This project uses **DVC (Data Version Control)** to version the dataset and ensure reproducibility.
+
+### Initial Setup (Already Done)
+```bash
+# DVC is initialized and data/raw is tracked
+dvc init
+dvc add data/raw
+dvc remote add -d local_storage D:\dvc_store
+dvc push
+```
+
+### Clone & Pull Data
+If you clone this repository, the actual data files are **not included** in Git. To retrieve them:
+
+```bash
+# Clone the repository
+git clone <repo-url>
+cd <repo-directory>
+
+# Pull the data from DVC remote
+dvc pull
+```
+
+This will download all data files from the configured remote storage into `data/raw/`.
+
+### Verify Data
+After pulling, verify the data is available:
+```bash
+ls data/raw/  # Should show train_FD*.txt, test_FD*.txt, RUL_FD*.txt
+```
+
+### Updating Data
+If you modify or add new data:
+```bash
+dvc add data/raw
+dvc push
+git add data/raw.dvc data/.gitignore
+git commit -m "Update dataset"
+```
 
 ## Next Steps
 - Set up a virtual environment and install requirements.

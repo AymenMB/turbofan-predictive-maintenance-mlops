@@ -3,7 +3,10 @@ numpy
 scikit-learn
 xgboost
 mlflow
-zenml
+zenml[server]
+sqlalchemy-utils
+sqlmodel
+passlib
 dvc
 fastapi
 uvicorn

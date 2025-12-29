@@ -1,5 +1,10 @@
 # Turbofan RUL Prediction
 
+![CI/CD Pipeline](https://github.com/AymenMB/turbofan-predictive-maintenance-mlops/workflows/CI%2FCD%20Pipeline%20-%20Turbofan%20RUL%20MLOps/badge.svg)
+![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)
+![Docker](https://img.shields.io/badge/docker-ready-brightgreen.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+
 Production-grade MLOps project using NASA CMAPSS turbofan engine data for Remaining Useful Life (RUL) prediction.
 
 ## Repository Structure

@@ -124,8 +124,9 @@ def train_model(
         
         # Save model locally for API deployment
         print("\n[5/5] Saving model artifact...")
-        model_path = project_root / "model.json"
-        model.save_model(model_path)
+        model_path = project_root / "model.ubj"
+        # Use get_booster() to save the native XGBoost model
+        model.get_booster().save_model(str(model_path))
         print(f"  ✓ Model saved to: {model_path}")
         
         # Log model as artifact in MLflow

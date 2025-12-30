@@ -7,6 +7,9 @@ __pycache__/
 # macOS metadata
 .DS_Store
 
+# R folder (separate project with its own git repo)
+R/
+
 # Data directory will be tracked via DVC later
 # Keep .dvc files tracked, but ignore the actual data
 /data/raw/*

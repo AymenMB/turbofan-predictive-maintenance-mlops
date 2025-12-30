@@ -1,79 +1,120 @@
-# Turbofan RUL Prediction
+# Turbofan RUL Prediction - MLOps Project
 
 ![CI/CD Pipeline](https://github.com/AymenMB/turbofan-predictive-maintenance-mlops/workflows/CI%2FCD%20Pipeline%20-%20Turbofan%20RUL%20MLOps/badge.svg)
 ![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)
 ![Docker](https://img.shields.io/badge/docker-ready-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-Production-grade MLOps project using NASA CMAPSS turbofan engine data for Remaining Useful Life (RUL) prediction.
+> **Production-grade MLOps pipeline for predicting Remaining Useful Life (RUL) of turbofan engines using NASA CMAPSS dataset.**
 
-## Repository Structure
+---
 
-```
-.
-├── api/                # FastAPI application (inference service)
-├── data/
-│   ├── raw/            # Raw CMAPSS files (train_FD*, test_FD*, RUL_FD*)
-│   └── processed/      # Cleaned/feature-engineered datasets (generated)
-├── docker/             # Dockerfiles and container configs
-├── notebooks/          # EDA and experimentation notebooks
-├── pipelines/          # ZenML pipelines (data -> train -> eval -> export)
-├── src/                # Reusable source code (preprocessing, training, eval)
-├── .gitignore          # Ignored files (data/ is ignored; DVC will manage later)
-├── requirements.txt    # Python dependencies
-└── README.md           # This file
-```
+## 🎯 Project Overview
 
-## Data
-- The dataset files provided in this repository were moved to `data/raw/`.
-- The `data/` directory is ignored by Git and managed by DVC.
+| Component | Technology | Status |
+|-----------|------------|--------|
+| Version Control | Git + GitHub | ✅ |
+| Data Versioning | DVC | ✅ |
+| Experiment Tracking | MLflow | ✅ |
+| Pipeline Orchestration | ZenML | ✅ |
+| Hyperparameter Optimization | Optuna | ✅ |
+| REST API | FastAPI | ✅ |
+| Containerization | Docker | ✅ |
+| CI/CD | GitHub Actions | ✅ |
+| Monitoring | Drift Detection | ✅ |
 
-## Data Versioning (DVC)
+**Performance:** RMSE = **50.71 cycles** (1.26% improvement over baseline)
 
-This project uses **DVC (Data Version Control)** to version the dataset and ensure reproducibility.
+---
 
-### Initial Setup (Already Done)
-```bash
-# DVC is initialized and data/raw is tracked
-dvc init
-dvc add data/raw
-dvc remote add -d local_storage D:\dvc_store
-dvc push
-```
-
-### Clone & Pull Data
-If you clone this repository, the actual data files are **not included** in Git. To retrieve them:
+## 🚀 Quick Start
 
 ```bash
-# Clone the repository
-git clone <repo-url>
-cd <repo-directory>
+# 1. Clone repository
+git clone https://github.com/AymenMB/turbofan-predictive-maintenance-mlops.git
+cd turbofan-predictive-maintenance-mlops
 
-# Pull the data from DVC remote
+# 2. Setup environment
+python -m venv .venv
+.venv\Scripts\activate  # Windows
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Pull data with DVC
 dvc pull
+
+# 5. Run API
+python -m uvicorn api.main:app --reload --port 8000
+
+# 6. Open Swagger UI → http://localhost:8000/docs
 ```
 
-This will download all data files from the configured remote storage into `data/raw/`.
+---
 
-### Verify Data
-After pulling, verify the data is available:
+## 🐳 Docker Deployment
+
 ```bash
-ls data/raw/  # Should show train_FD*.txt, test_FD*.txt, RUL_FD*.txt
+# Build and run
+docker-compose up -d
+
+# Test API
+curl http://localhost:8000/health
 ```
 
-### Updating Data
-If you modify or add new data:
-```bash
-dvc add data/raw
-dvc push
-git add data/raw.dvc data/.gitignore
-git commit -m "Update dataset"
+---
+
+## 📚 Documentation
+
+For complete step-by-step implementation details, see **[DOCUMENTATION.md](DOCUMENTATION.md)**
+
+Includes:
+- Data preprocessing & RUL calculation
+- Model training & optimization
+- Pipeline orchestration (ZenML)
+- API deployment (FastAPI)
+- Docker containerization
+- CI/CD automation
+- Monitoring & drift detection
+
+---
+
+## 📊 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/health` | Health check |
+| POST | `/predict` | Predict RUL |
+| GET | `/monitoring` | Drift status |
+| GET | `/docs` | Swagger UI |
+
+---
+
+## 📁 Project Structure
+
+```
+├── api/                    # FastAPI application
+├── data/raw/               # NASA CMAPSS dataset (DVC)
+├── pipelines/              # ZenML pipeline definitions
+├── src/                    # Core ML code
+├── steps/                  # ZenML pipeline steps
+├── Dockerfile              # Container definition
+├── docker-compose.yml      # Docker orchestration
+├── model_optimized.ubj     # Production model
+└── DOCUMENTATION.md        # Complete guide
 ```
 
-## Next Steps
-- Set up a virtual environment and install requirements.
-- Initialize DVC and configure a remote to version datasets.
-- Set up MLflow tracking and start the first baseline experiment.
-- Scaffold a ZenML pipeline and a minimal FastAPI `/predict` endpoint.
-- Add Dockerfiles and optional CI.
+---
+
+## 🔗 Links
+
+- **GitHub:** [turbofan-predictive-maintenance-mlops](https://github.com/AymenMB/turbofan-predictive-maintenance-mlops)
+- **API Docs:** http://localhost:8000/docs
+- **MLflow UI:** http://localhost:5000
+
+---
+
+**Author:** Aymen Mabrouk  
+**Institution:** Ecole Polytechnique Sousse  
+**Version:** 1.1.0
 

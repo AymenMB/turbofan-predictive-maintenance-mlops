@@ -135,14 +135,14 @@ az containerapp update \
 Your **AeroGuard AI API** is now running the new code **live on the internet**, accessible via the URL, without you needing to touch the server manually!
 
 ```
-🌍 LIVE URL: https://aeroguard-api.azurecontainerapps.io
+🌍 LIVE URL: https://aeroguard-api.salmonfield-cb3d4cec.francecentral.azurecontainerapps.io
 
 Available Endpoints:
-  GET  /health          → Health check
+  GET  /health          → Health check ✅ WORKING
   POST /predict         → Single RUL prediction
   POST /predict/batch   → Batch predictions
   GET  /model-info      → Model information
-  GET  /docs            → Swagger API documentation
+  GET  /docs            → Swagger API documentation ✅ WORKING
 ```
 
 ---

@@ -1,0 +1,8 @@
+# Minimal requirements for API deployment only
+pandas
+numpy
+xgboost
+fastapi
+uvicorn[standard]
+scikit-learn
+requests

@@ -12,7 +12,9 @@ import numpy as np
 from datetime import datetime
 
 # ==================== Configuration ====================
-API_BASE_URL = "http://localhost:8000"
+# Use Azure deployment for production, localhost for development
+API_BASE_URL = "https://aeroguard-api.salmonfield-cb3d4cec.francecentral.azurecontainerapps.io"
+# API_BASE_URL = "http://localhost:8000"  # Uncomment for local development
 
 st.set_page_config(
     page_title="AeroGuard AI | RUL Prediction",

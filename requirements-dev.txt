@@ -1,0 +1,29 @@
+# Full MLOps Requirements (for local development and Docker)
+# These are the complete dependencies for the full MLOps stack
+
+# Core ML
+pandas
+numpy
+scikit-learn
+xgboost
+
+# MLOps
+mlflow
+zenml[server]
+optuna
+dvc
+
+# Database
+sqlalchemy-utils
+sqlmodel
+passlib
+
+# API
+fastapi
+uvicorn
+
+# Visualization
+matplotlib
+streamlit==1.29.0
+plotly==5.18.0
+requests

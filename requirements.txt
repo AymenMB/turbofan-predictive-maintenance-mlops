@@ -1,17 +1,9 @@
-pandas
-numpy
-scikit-learn
-xgboost
-mlflow
-zenml[server]
-sqlalchemy-utils
-sqlmodel
-passlib
-dvc
-fastapi
-uvicorn
-matplotlib
-optuna
-streamlit==1.29.0
-plotly==5.18.0
-requests
+# Streamlit Frontend Requirements
+# For Streamlit Cloud deployment (the frontend only needs these lightweight packages)
+# The API backend runs on Azure Container Apps with full dependencies
+
+streamlit>=1.29.0
+plotly>=5.18.0
+requests>=2.31.0
+pandas>=2.0.0
+numpy>=1.24.0

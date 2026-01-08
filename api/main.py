@@ -309,6 +309,80 @@ async def predict_rul(features: EngineFeatures):
         )
 
 
+@app.post("/predict/batch")
+async def predict_batch(features_list: List[EngineFeatures]):
+    """
+    Batch prediction for multiple engines.
+    
+    Args:
+        features_list: List of engine sensor readings
+        
+    Returns:
+        List of predictions with RUL, status, and confidence
+    """
+    if model is None:
+        raise HTTPException(status_code=503, detail="Model not loaded")
+    
+    predictions = []
+    
+    for features in features_list:
+        try:
+            # Convert input to DataFrame
+            input_data = pd.DataFrame([features.dict()])
+            
+            # Drop constant sensors
+            input_data = input_data.drop(columns=DROPPED_SENSORS)
+            
+            # Create engineered features
+            engineered_data = create_engineered_features(input_data)
+            
+            # Select only the expected features in the correct order
+            if EXPECTED_FEATURES:
+                for feat in EXPECTED_FEATURES:
+                    if feat not in engineered_data.columns:
+                        engineered_data[feat] = 0.0
+                final_data = engineered_data[EXPECTED_FEATURES]
+            else:
+                final_data = engineered_data
+            
+            # Convert to DMatrix for XGBoost
+            dmatrix = xgb.DMatrix(final_data)
+            
+            # Make prediction
+            rul_pred = model.predict(dmatrix)[0]
+            rul_pred = max(0.0, min(125.0, float(rul_pred)))
+            
+            # Determine status
+            if rul_pred < 30:
+                status = "Critical"
+                confidence = "High"
+            elif rul_pred < 80:
+                status = "Warning"
+                confidence = "Medium"
+            else:
+                status = "Healthy"
+                confidence = "High"
+            
+            predictions.append({
+                "RUL": round(rul_pred, 2),
+                "status": status,
+                "confidence": confidence
+            })
+            
+        except Exception as e:
+            predictions.append({
+                "RUL": None,
+                "status": "Error",
+                "confidence": None,
+                "error": str(e)
+            })
+    
+    return {
+        "predictions": predictions,
+        "count": len(predictions)
+    }
+
+
 @app.get("/model-info")
 async def model_info():
     """Get detailed information about the loaded model."""

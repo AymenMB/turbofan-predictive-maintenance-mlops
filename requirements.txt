@@ -12,3 +12,6 @@ fastapi
 uvicorn
 matplotlib
 optuna
+streamlit==1.29.0
+plotly==5.18.0
+requests

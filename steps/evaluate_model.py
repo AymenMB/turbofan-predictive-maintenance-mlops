@@ -1,7 +1,7 @@
 """
 Model evaluation step for ZenML pipeline.
 
-Evaluates trained model and logs metrics.
+Evaluates trained model with engineered features and logs metrics.
 """
 
 import pandas as pd
@@ -11,6 +11,27 @@ from xgboost import XGBRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from zenml import step
 from zenml.client import Client
+
+
+RUL_CAP = 125
+
+
+def get_feature_columns(df: pd.DataFrame) -> list:
+    """Get feature columns for training (rolling + normalized, not raw)."""
+    exclude_cols = ['unit_nr', 'time_cycles', 'RUL', 'RUL_clipped']
+    feature_cols = []
+    
+    for col in df.columns:
+        if col in exclude_cols:
+            continue
+        is_rolling = col.endswith('_mean') or col.endswith('_std')
+        is_normalized = col.endswith('_norm')
+        is_setting = col.startswith('setting_')
+        
+        if is_rolling or is_normalized or is_setting:
+            feature_cols.append(col)
+    
+    return sorted(feature_cols)
 
 
 @step
@@ -23,7 +44,7 @@ def evaluate_model(
     
     Args:
         model: Trained XGBoost model
-        df: Cleaned DataFrame with RUL target
+        df: Cleaned DataFrame with engineered features and RUL_clipped target
         
     Returns:
         Dictionary containing evaluation metrics
@@ -36,13 +57,15 @@ def evaluate_model(
     print("\n[1/3] Preparing test data...")
     test_df = df[df['unit_nr'] > 80].copy()
     
-    feature_cols = [col for col in df.columns 
-                    if col not in ['unit_nr', 'time_cycles', 'RUL']]
+    # Get engineered feature columns
+    feature_cols = get_feature_columns(df)
     
+    # Use clipped RUL as target
     X_test = test_df[feature_cols]
-    y_test = test_df['RUL']
+    y_test = test_df['RUL_clipped']
     
     print(f"  → Test set: {len(test_df)} samples from engines 81-100")
+    print(f"  → Using {len(feature_cols)} engineered features")
     
     # Make predictions
     print("\n[2/3] Computing predictions...")
@@ -54,14 +77,22 @@ def evaluate_model(
     r2 = r2_score(y_test, y_pred)
     
     metrics = {
-        "test_rmse": rmse,
-        "test_mae": mae,
-        "test_r2": r2
+        "test_rmse": float(rmse),
+        "test_mae": float(mae),
+        "test_r2": float(r2)
     }
     
     print(f"  → Test RMSE: {rmse:.2f} cycles")
     print(f"  → Test MAE: {mae:.2f} cycles")
     print(f"  → R² Score: {r2:.4f}")
+    
+    # Performance assessment
+    if rmse < 20:
+        print("✅ EXCELLENT: Matches R implementation (~17 cycles)")
+    elif rmse < 25:
+        print("✅ GOOD: Close to R implementation (< 25 cycles)")
+    else:
+        print("⚠️  MODERATE: Room for improvement")
     
     # Log metrics to MLflow (if experiment tracker is configured)
     print("\n[3/3] Logging metrics...")
@@ -73,7 +104,7 @@ def evaluate_model(
             mlflow.log_metric("test_r2", r2)
             print("  ✓ Metrics logged to MLflow")
         else:
-            print("  ⚠ No experiment tracker configured, metrics not logged")
+            print("  ⚠ No experiment tracker configured")
     except Exception as e:
         print(f"  ⚠ Could not log to MLflow: {e}")
     

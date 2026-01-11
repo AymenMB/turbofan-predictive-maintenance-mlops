@@ -23,7 +23,7 @@
 | CI/CD | GitHub Actions | ✅ |
 | Monitoring | Drift Detection | ✅ |
 
-**Performance:** RMSE = **50.71 cycles** (1.26% improvement over baseline)
+**Performance:** RMSE = **18.64 cycles** (63% improvement from baseline, R² = 0.79)
 
 ---
 
